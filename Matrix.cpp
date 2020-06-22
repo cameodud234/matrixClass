@@ -1,7 +1,6 @@
 #include "Matrix.h"
 
 template class Matrix<int>;
-template class Matrix<unsigned int>;
 template class Matrix<long int>;
 template class Matrix<float>;
 template class Matrix<double>;
@@ -9,8 +8,8 @@ template class Matrix<std::size_t>;
 
 template <typename T>
 Matrix<T>::Matrix() {
-	this->dim_row = INT_MIN;
-	this->dim_col = INT_MIN;
+	this->dim_row = 0;
+	this->dim_col = 0;
 }
 
 template <typename T>
@@ -44,7 +43,7 @@ Matrix<T>::Matrix(const Matrix<T>& mat) {
 }
 
 template <typename T>
-void Matrix<T>::setDimRow(std::size_t& dim_row, bool& one) {
+void Matrix<T>::setDimRow(std::size_t& dim_row, bool one) {
 
 	if (dim_row > this->dim_row && one) {
 
@@ -71,12 +70,12 @@ void Matrix<T>::setDimRow(std::size_t& dim_row, bool& one) {
 		this->mat.resize(dim_row);
 	}
 
-	this->dim_row = dim_row;
+	this->dim_row = mat.size();
 
 }
 
 template <typename T>
-void Matrix<T>::setDimCol(std::size_t& dim_col, bool& one) {
+void Matrix<T>::setDimCol(std::size_t& dim_col, bool one) {
 
 	if (dim_col > this->dim_col && one) {
 
@@ -100,7 +99,7 @@ void Matrix<T>::setDimCol(std::size_t& dim_col, bool& one) {
 		}
 	}
 
-	this->dim_col = dim_col;
+	this->dim_col = mat[0].size();
 
 }
 
@@ -113,26 +112,6 @@ void Matrix<T>::setMat(const std::vector <std::vector<T>>& mat) {
 }
 
 template <typename T>
-Matrix<T> Matrix<T>::operator+(const Matrix<T>& m) {
-	bool rowIsSame = this->dim_row == m.getRowDim();
-	bool colIsSame = this->dim_col == m.getColDim();
-	
-	Matrix<T> obj{};
-
-	// We can resize this here instead of dynamically resizing this.
-
-	if (rowIsSame && colIsSame) {
-		for (std::size_t i = 0; i < this->dim_row; i++) {
-			for (std::size_t j = 0; j < this->dim_col; j++) {
-				
-			}
-		}
-	}
-
-	return obj;
-}
-
-template <typename T>
 bool Matrix<T>::operator==(const Matrix<T>& mat) const {
 	bool val = (this->mat == mat.mat) &&
 		(this->dim_row == mat.dim_row) &&
@@ -142,10 +121,9 @@ bool Matrix<T>::operator==(const Matrix<T>& mat) const {
 }
 
 template <typename T>
-Matrix<T> Matrix<T>::operator=(const Matrix<T>& mat) {
-	Matrix obj{ mat };
-	obj.mat = mat.mat;
-	obj.dim_row = mat.dim_row;
-	obj.dim_col = mat.dim_col;
-	return obj;
+Matrix<T>& Matrix<T>::operator=(const Matrix<T>& mat) {
+	this->mat = mat.mat;
+	this->dim_row = mat.dim_row;
+	this->dim_col = mat.dim_col;
+	return *this;
 }

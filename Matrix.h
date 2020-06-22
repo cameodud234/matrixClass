@@ -21,22 +21,19 @@ public:
 	// This sets row size and if bigger than current
 	// the values will be a boolean val one for 1's 
 	// and boolean one for 0's
-	void setDimRow(std::size_t& dim_row, bool& one);
-	void setDimCol(std::size_t& dim_col, bool& one);
+	void setDimRow(std::size_t& dim_row, bool one);
+	void setDimCol(std::size_t& dim_col, bool one);
 	void setMat(const std::vector <std::vector<T>>& mat);
 	 
 	std::size_t getRowDim() const { return this->dim_row; }
 	std::size_t getColDim() const { return this->dim_col; }
-	const std::vector<std::vector<T>>& getMat() { return this->mat; }
+	std::vector<std::vector<T>> getMat() const { return this->mat; }
 
 	bool operator==(const Matrix<T>& mat) const;
 
-	Matrix operator=(const Matrix<T>& mat);
+	Matrix<T>& operator=(const Matrix<T>& mat);
 
 	std::vector<T> operator[](const std::size_t& iter) const { return this->mat.at(iter); }
-
-
-	Matrix<T> operator+(const Matrix<T>& m);
 
 	friend std::ostream& operator<<(std::ostream& os, const Matrix<T> &mat) {
 		for (std::size_t i = 0; i < mat.dim_row; i++) {
@@ -49,7 +46,28 @@ public:
 		return os;
 	}
 
-
 };
+
+template <typename T>
+Matrix<T>& operator+(const Matrix<T>& m1, const Matrix<T>& m2) {
+
+	Matrix<T> obj{m1};
+
+	std::vector < std::vector<T>> objMat;
+	std::vector < std::vector<T>> m1Mat = m1.getMat();
+	std::vector < std::vector<T>> m2Mat = m2.getMat();
+
+
+	for (std::size_t i = 0; i < m1.getRowDim(); i++) {
+		for (std::size_t j = 0; j < obj.getColDim(); j++) {
+			objMat[i][j] = m1Mat[i][j] + m2Mat[i][j];
+		}
+	}
+
+	return obj;
+
+}
+
+
 
 #endif // MATRIX_H
