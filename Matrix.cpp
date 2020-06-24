@@ -43,64 +43,19 @@ Matrix<T>::Matrix(const Matrix<T>& mat) {
 }
 
 template <typename T>
-void Matrix<T>::setDimRow(std::size_t& dim_row, bool one) {
-
-	if (dim_row > this->dim_row && one) {
-
-		std::vector<T> addVec{};
-		for (std::size_t i = 0; i < this->dim_col; i++) {
-			addVec.push_back(1);
-		}
-
-		this->mat.push_back(addVec);
-
-	}
-	else if (dim_row > this->dim_row && !one) {
-
-		std::vector<T> addVec{};
-		for (std::size_t i = 0; i < this->dim_col; i++) {
-			addVec.push_back(0);
-		}
-
-		this->mat.push_back(addVec);
-
-	}
-
-	else {
-		this->mat.resize(dim_row);
-	}
-
-	this->dim_row = mat.size();
-
+void Matrix<T>::setDimRow(const std::size_t& dim_row) {
+	this->mat.resize(dim_row);
+	this->dim_row = dim_row;
 }
 
 template <typename T>
-void Matrix<T>::setDimCol(std::size_t& dim_col, bool one) {
+void Matrix<T>::setDimCol(const std::size_t& dim_col) {
 
-	if (dim_col > this->dim_col && one) {
-
-		for (std::size_t i = 0; i < this->dim_row; i++) {
-			this->mat[i].push_back(1);
-		}
-
+	for (std::size_t i = 0; i < this->dim_row; i++) {
+		this->mat[i].resize(dim_col);
 	}
 
-	else if (dim_col > this->dim_col && !one) {
-
-		for (std::size_t i = 0; i < this->dim_row; i++) {
-			this->mat[i].push_back(0);
-		}
-
-	}
-
-	else {
-		for (std::size_t i = 0; i < this->dim_row; i++) {
-			this->mat[i].resize(dim_col);
-		}
-	}
-
-	this->dim_col = mat[0].size();
-
+	this->dim_col = dim_col;
 }
 
 template <typename T>
@@ -109,6 +64,19 @@ void Matrix<T>::setMat(const std::vector <std::vector<T>>& mat) {
 	this->mat = mat;
 	this->dim_row = mat.size();
 	this->dim_col = mat[0].size();
+}
+
+template <typename T>
+T Matrix<T>::getMaxElem() const {
+	T max = 0;
+	for (std::size_t i = 0; i < this->dim_row; i++) {
+		for (std::size_t j = 0; j < this->dim_col; j++) {
+			if (max < this->mat[i][j]) {
+				max = this->mat[i][j];
+			}
+		}
+	}
+	return max;
 }
 
 template <typename T>
@@ -127,3 +95,4 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& mat) {
 	this->dim_col = mat.dim_col;
 	return *this;
 }
+
